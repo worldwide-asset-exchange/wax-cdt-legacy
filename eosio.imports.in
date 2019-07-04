@@ -276,3 +276,4 @@ _eosio_i32_to_f64
 _eosio_i64_to_f64
 _eosio_ui32_to_f64
 _eosio_ui64_to_f64
+verify_rsa_sha256_sig

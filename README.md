@@ -9,7 +9,7 @@ WAX-CDT is a toolchain for WebAssembly (WASM) and set of tools to facilitate con
 ### Guided Installation (Building from Scratch)
 ```sh
 $ git clone --recursive https://github.com/worldwide-asset-exchange/wax-cdt.git
-$ cd WAX-CDT
+$ cd wax-cdt
 $ ./build.sh
 $ sudo ./install.sh
 ```

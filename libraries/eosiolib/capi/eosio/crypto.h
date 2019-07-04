@@ -52,7 +52,7 @@ void assert_sha256( const char* data, uint32_t length, const capi_checksum256* h
  *  @post Executes next statement. If was not `true`, hard return.
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum hash;
  *  char data;
@@ -77,7 +77,7 @@ void assert_sha1( const char* data, uint32_t length, const capi_checksum160* has
  *  @post Executes next statement. If was not `true`, hard return.
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum hash;
  *  char data;
@@ -101,7 +101,7 @@ void assert_sha512( const char* data, uint32_t length, const capi_checksum512* h
  *  @post Executes next statement. If was not `true`, hard return.
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum hash;
  *  char data;
@@ -122,7 +122,7 @@ void assert_ripemd160( const char* data, uint32_t length, const capi_checksum160
  *  @param hash - Hash pointer
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum calc_hash;
  *  sha256( data, length, &calc_hash );
@@ -140,7 +140,7 @@ void sha256( const char* data, uint32_t length, capi_checksum256* hash );
  *  @param hash - Hash pointer
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum calc_hash;
  *  sha1( data, length, &calc_hash );
@@ -158,7 +158,7 @@ void sha1( const char* data, uint32_t length, capi_checksum160* hash );
  *  @param hash - Hash pointer
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum calc_hash;
  *  sha512( data, length, &calc_hash );
@@ -176,7 +176,7 @@ void sha512( const char* data, uint32_t length, capi_checksum512* hash );
  *  @param hash - Hash pointer
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum calc_hash;
  *  ripemod160( data, length, &calc_hash );
@@ -194,10 +194,10 @@ void ripemd160( const char* data, uint32_t length, capi_checksum160* hash );
  *  @param siglen - Signature length
  *  @param pub - Public key
  *  @param publen - Public key length
-*   @return int - number of bytes written to pub
+ *  @return int - number of bytes written to pub
  *
  *  Example:
-*
+ *
  *  @code
  *  @endcode
  */
@@ -217,7 +217,7 @@ int recover_key( const capi_checksum256* digest, const char* sig, size_t siglen,
  *  @post Executes next statement. If was not `true`, hard return.
  *
  *  Example:
-*
+ *
  *  @code
  *  checksum digest;
  *  char sig;
@@ -232,7 +232,42 @@ int recover_key( const capi_checksum256* digest, const char* sig, size_t siglen,
 __attribute__((eosio_wasm_import))
 void assert_recover_key( const capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen );
 
+/// @}crypto
+
+
+/**
+ *  @defgroup wax WAX
+ *  @brief Defines custom WAX extension API
+ *  @ingroup crypto
+ */
+
+
+/**
+ * Verifies an RSA signed message
+ *
+ * @warning WAX specific
+ *
+ * @ingroup wax
+ * @param message - message buffer to verify
+ * @param message_len - message buffer length
+ * @param signature - signature as hex string
+ * @param signature_len - signature length
+ * @param exponent - public key exponent as hex string
+ * @param exponent_len - exponent length
+ * @param modulus - modulus as hex string (a leading zero is not allowed)
+ * @param modulus_len - modulus length
+ *
+ * @return 0 if validation has failed, non zero if everything is Ok
+ *
+ * @sa https://www.emc.com/collateral/white-papers/h11300-pkcs-1v2-2-rsa-cryptography-standard-wp.pdf
+ */
+__attribute__((eosio_wasm_import))
+int verify_rsa_sha256_sig(const void* message,   uint32_t message_len,
+                          const char* signature, uint32_t signature_len,
+                          const char* exponent,  uint32_t exponent_len,
+                          const char* modulus,   uint32_t modulus_len);
+
 #ifdef __cplusplus
 }
 #endif
-/// @}
+

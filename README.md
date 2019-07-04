@@ -3,17 +3,20 @@
 
 WAX-CDT is a toolchain for WebAssembly (WASM) and set of tools to facilitate contract writing for the WAX platform.
 
-
-```
-
 ### Guided Installation (Building from Scratch)
+We are not providing pre-compiled packages (\*). Therefore, you will have to compile the source code and install it with the following instructions:
+
 ```sh
 $ git clone --recursive https://github.com/worldwide-asset-exchange/wax-cdt.git
 $ cd wax-cdt
 $ ./build.sh
 $ sudo ./install.sh
 ```
+
+(\*) We have a development docker ready to be used, see [this](https://github.com/worldwide-asset-exchange/wax-blockchain/tree/develop/samples/hello-world)
+
 ### Building your first smart contract
+If our development docker doesn't suit your needs, do the following:
 - Navigate to the hello folder in examples (./examples/hello).
 - You should then see the hello.cpp file
 - Now run the compiler

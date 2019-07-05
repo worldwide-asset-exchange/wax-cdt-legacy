@@ -11,6 +11,16 @@
 #include <array>
 
 namespace eosio {
+    namespace internal_use_do_not_use {
+        extern "C" {
+            __attribute__((eosio_wasm_import))
+            int verify_rsa_sha256_sig(const void* message,   uint32_t message_len,
+                                      const char* signature, uint32_t signature_len,
+                                      const char* exponent,  uint32_t exponent_len,
+                                      const char* modulus,   uint32_t modulus_len);
+        }
+    }
+
 
    /**
     *  @defgroup public_key Public Key Type
@@ -292,7 +302,7 @@ namespace eosio {
                                       std::string_view signature,
                                       std::string_view exponent,
                                       std::string_view modulus) {
-        return ::verify_rsa_sha256_sig(
+        return internal_use_do_not_use::verify_rsa_sha256_sig(
             message, message_len,
             signature.data(), signature.size(),
             exponent.data(), exponent.size(),

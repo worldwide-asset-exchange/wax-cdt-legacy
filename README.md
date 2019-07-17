@@ -1,6 +1,5 @@
 # WAX-CDT (Contract Development Toolkit)
 ## Version : wax-1.6.1-1.0.0
-
 WAX-CDT is a toolchain for WebAssembly (WASM) and set of tools to facilitate contract writing for the WAX platform.
 
 ### Guided Installation (Building from Scratch)

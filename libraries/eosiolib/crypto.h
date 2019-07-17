@@ -239,7 +239,7 @@ void assert_recover_key( const capi_checksum256* digest, const char* sig, size_t
 /**
  *  @defgroup wax WAX Chain C extension API
  *  @brief Defines WAX %C extension API
- *  @ingroup cryptocapi
+ *  @ingroup crypto
  *  @{
  */
 
@@ -262,6 +262,7 @@ void assert_recover_key( const capi_checksum256* digest, const char* sig, size_t
  *
  * @sa https://www.emc.com/collateral/white-papers/h11300-pkcs-1v2-2-rsa-cryptography-standard-wp.pdf
  */
+__attribute__((eosio_wasm_import))
 int verify_rsa_sha256_sig(const void* message,   uint32_t message_len,
                           const char* signature, uint32_t signature_len,
                           const char* exponent,  uint32_t exponent_len,

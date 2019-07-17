@@ -208,7 +208,7 @@ namespace eosio {
    /**
     *  @defgroup wax WAX Chain C++ extension API
     *  @brief Defines WAX C++ extension API
-    *  @ingroup cryptocppapi
+    *  @ingroup core
     *  @{
     */
 

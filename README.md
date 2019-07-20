@@ -12,7 +12,9 @@ $ ./build.sh
 $ sudo ./install.sh
 ```
 
-(\*) We have a development docker ready to be used, see [this](https://github.com/worldwide-asset-exchange/wax-blockchain/tree/develop/samples/hello-world)
+(\*) But we have docker images:
+1. CDT docker [images](https://hub.docker.com/r/waxteam/cdt/tags) based on Ubuntu 18.04 with compiled wax-cdt.
+2. Development docker [images](https://hub.docker.com/r/waxteam/dev/tags) ready to be used (they include wax-blockchain, wax-cdt and native/wasm C++ compilers). For a usage example, see [this](https://github.com/worldwide-asset-exchange/wax-blockchain/tree/develop/samples/hello-world).
 
 ### Installed Tools
 ---

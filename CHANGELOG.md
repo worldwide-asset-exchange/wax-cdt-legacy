@@ -8,5 +8,6 @@ FEATURES:
 - [KEW-1360] Fork CDT, apply WAX patches
 
 IMPROVEMENTS:
+- Fix Ricardian Contract in example
 
 BUG FIXES:

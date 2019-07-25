@@ -1,13 +1,24 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in eos/LICENSE
  */
 #pragma once
-#include <eosiolib/types.h>
+#include "types.h"
+
+#warning "<eosiolib/permission.h> is deprecated use <eosio/permission.h>. If you are using C++ the .h header files will be removed from inclusion entirely in v1.7.0"
 
 extern "C" {
+
+  /**
+  * @defgroup permission_c Permissions C API
+  * @ingroup c_api
+  *
+  * @brief Methods for testing against transactions, delays, keys and permissions
+  * @{
+  */
+
    /**
-    *  @brief Checks if a transaction is authorized by a provided set of keys and permissions
+    *  Checks if a transaction is authorized by a provided set of keys and permissions
     *
     *  @param trx_data - pointer to the start of the serialized transaction
     *  @param trx_size - size (in bytes) of the serialized transaction
@@ -18,6 +29,7 @@ extern "C" {
     *
     *  @return 1 if the transaction is authorized, 0 otherwise
     */
+   __attribute__((eosio_wasm_import))
    int32_t
    check_transaction_authorization( const char* trx_data,     uint32_t trx_size,
                                     const char* pubkeys_data, uint32_t pubkeys_size,
@@ -25,9 +37,9 @@ extern "C" {
                                   );
 
    /**
-    *  @brief Checks if a permission is authorized by a provided delay and a provided set of keys and permissions
+    *  Checks if a permission is authorized by a provided delay and a provided set of keys and permissions
     *
-    *  @param account    - the account owner of the permission
+    *  @param account - the account owner of the permission
     *  @param permission - the name of the permission to check for authorization
     *  @param pubkeys_data - pointer to the start of the serialized vector of provided public keys
     *  @param pubkeys_size  - size (in bytes) of serialized vector of provided public keys (can be 0 if no public keys are to be provided)
@@ -37,6 +49,7 @@ extern "C" {
     *
     *  @return 1 if the permission is authorized, 0 otherwise
     */
+   __attribute__((eosio_wasm_import))
    int32_t
    check_permission_authorization( capi_name account,
                                    capi_name permission,
@@ -46,23 +59,27 @@ extern "C" {
                                  );
 
    /**
-    *  @brief Returns the last used time of a permission
+    *  Returns the last used time of a permission
     *
     *  @param account    - the account owner of the permission
     *  @param permission - the name of the permission
     *
     *  @return the last used time (in microseconds since Unix epoch) of the permission
     */
+   __attribute__((eosio_wasm_import))
    int64_t get_permission_last_used( capi_name account, capi_name permission );
 
 
    /**
-    *  @brief Returns the creation time of an account
+    *  Returns the creation time of an account
     *
-    *  @param account    - the account
+    *  @param account - the account
     *
     *  @return the creation time (in microseconds since Unix epoch) of the account
     */
+   __attribute__((eosio_wasm_import))
    int64_t get_account_creation_time( capi_name account );
+
+   ///@}
 
 }

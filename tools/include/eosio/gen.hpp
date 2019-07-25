@@ -147,7 +147,7 @@ struct generation_utils {
 
    inline void set_contract_name( const std::string& cn ) { contract_name = cn; }
    inline std::string get_contract_name()const { return contract_name; }
-   inline void set_resource_dirs( const llvm::cl::list<std::string>& rd ) {
+   inline void set_resource_dirs( const std::vector<std::string>& rd ) {
       llvm::SmallString<128> cwd;
       auto has_real_path = llvm::sys::fs::real_path("./", cwd, true);
       if (!has_real_path)
@@ -180,6 +180,11 @@ struct generation_utils {
       if (!tmp.empty())
          return tmp;
       return decl->getNameAsString();
+   }
+   static inline std::string get_notify_pair( const clang::CXXMethodDecl* decl ) {
+      std::string notify_pair = "";
+      auto tmp = decl->getEosioNotifyAttr()->getName();
+      return tmp;
    }
    static inline std::string get_action_name( const clang::CXXRecordDecl* decl ) {
       std::string action_name = "";
@@ -451,25 +456,25 @@ struct generation_utils {
 
    inline std::string translate_type( const clang::QualType& type ) {
       if ( is_template_specialization( type, {"ignore"} ) )
-         return _translate_type(get_template_argument( type ).getAsType() );
+         return translate_type(get_template_argument( type ).getAsType() );
       else if ( is_template_specialization( type, {"binary_extension"} ) ) {
-         auto t = _translate_type(get_template_argument( type ).getAsType());
+         auto t = translate_type(get_template_argument( type ).getAsType());
          return t+"$";
       }
-      else if ( is_template_specialization( type, {"vector", "set"} ) ) {
-         auto t =_translate_type(get_template_argument( type ).getAsType());
+      else if ( is_template_specialization( type, {"vector", "set", "deque", "list"} ) ) {
+         auto t =translate_type(get_template_argument( type ).getAsType());
          return t=="int8" ? "bytes" : t+"[]";
       }
       else if ( is_template_specialization( type, {"optional"} ) )
-         return _translate_type(get_template_argument( type ).getAsType())+"?";
+         return translate_type(get_template_argument( type ).getAsType())+"?";
       else if ( is_template_specialization( type, {"map"} )) {
-         auto t0 = _translate_type(get_template_argument( type ).getAsType());
-         auto t1 = _translate_type(get_template_argument( type, 1).getAsType());
+         auto t0 = translate_type(get_template_argument( type ).getAsType());
+         auto t1 = translate_type(get_template_argument( type, 1).getAsType());
          return replace_in_name("pair_" + t0 + "_" + t1 + "[]");
       }
       else if ( is_template_specialization( type, {"pair"} )) {
-         auto t0 = _translate_type(get_template_argument( type ).getAsType());
-         auto t1 = _translate_type(get_template_argument( type, 1).getAsType());
+         auto t0 = translate_type(get_template_argument( type ).getAsType());
+         auto t1 = translate_type(get_template_argument( type, 1).getAsType());
          return replace_in_name("pair_" + t0 + "_" + t1);
       }
       else if ( is_template_specialization( type, {"tuple"} )) {
@@ -489,17 +494,15 @@ struct generation_utils {
          std::string ret = tst->getTemplateName().getAsTemplateDecl()->getName().str()+"_";
          for (int i=0; i < tst->getNumArgs(); ++i) {
             auto arg = get_template_argument(type,i);
-            if (arg.getAsExpr()) {
-               auto ce = llvm::dyn_cast<clang::CastExpr>(arg.getAsExpr());
-               if (ce) { 
-                  auto il = llvm::dyn_cast<clang::IntegerLiteral>(ce->getSubExpr());
-                  ret += std::to_string(il->getValue().getLimitedValue());
-                  if ( i < tst->getNumArgs()-1 )
-                     ret += "_";
-               }
+            if (auto ce = arg.getKind() == clang::TemplateArgument::ArgKind::Expression
+                  ? llvm::dyn_cast<clang::CastExpr>(arg.getAsExpr()) : nullptr) {
+               auto il = llvm::dyn_cast<clang::IntegerLiteral>(ce->getSubExpr());
+               ret += std::to_string(il->getValue().getLimitedValue());
+               if ( i < tst->getNumArgs()-1 )
+                  ret += "_";
             }
             else {
-               ret += _translate_type(get_template_argument( type, i ).getAsType());
+               ret += translate_type(get_template_argument( type, i ).getAsType());
                if ( i < tst->getNumArgs()-1 )
                   ret += "_";
             }

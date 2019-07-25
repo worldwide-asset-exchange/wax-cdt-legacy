@@ -1,14 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in eos/LICENSE
  */
 #pragma once
+
+#include "system.hpp"
 
 #include <array>
 #include <algorithm>
 #include <type_traits>
 
-#include <eosiolib/system.h>
+#warning "<eosiolib/fixed_bytes.hpp> is deprecated use <eosio/fixed_bytes.hpp>"
 
 namespace eosio {
 
@@ -35,8 +37,8 @@ namespace eosio {
 
     /**
     *  @defgroup fixed_bytes Fixed Size Byte Array
-    *  @brief Fixed size array of bytes sorted lexicographically
     *  @ingroup types
+    *  @brief Fixed size array of bytes sorted lexicographically
     *  @{
     */
 
@@ -71,7 +73,7 @@ namespace eosio {
                    continue;
                }
 
-               eosio_assert( sub_words_left == 1, "unexpected error in fixed_bytes constructor" );
+               eosio::check( sub_words_left == 1, "unexpected error in fixed_bytes constructor" );
                temp_word |= static_cast<word_t>(*w_itr);
                sub_words_left = num_sub_words;
 
@@ -133,7 +135,7 @@ namespace eosio {
          template<typename Word, size_t NumWords,
                   typename Enable = typename std::enable_if<std::is_integral<Word>::value &&
                                                              !std::is_same<Word, bool>::value &&
-                                                             sizeof(Word) < sizeof(word_t)>::type >
+                                                             std::less<size_t>{}( sizeof(Word), sizeof(word_t))>::type >
          fixed_bytes(const std::array<Word, NumWords>& arr)
          {
             static_assert( sizeof(word_t) == (sizeof(word_t)/sizeof(Word)) * sizeof(Word),
@@ -152,7 +154,7 @@ namespace eosio {
          template<typename Word, size_t NumWords,
                   typename Enable = typename std::enable_if<std::is_integral<Word>::value &&
                                                              !std::is_same<Word, bool>::value &&
-                                                             sizeof(Word) < sizeof(word_t)>::type >
+                                                             std::less<size_t>{}( sizeof(Word), sizeof(word_t))>::type >
          fixed_bytes(const Word(&arr)[NumWords])
          {
             static_assert( sizeof(word_t) == (sizeof(word_t)/sizeof(Word)) * sizeof(Word),
